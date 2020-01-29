@@ -1,21 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <script src="js/jquery.js"></script>
-    <script src="js/scripts.js"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Scripts -->
+  <script src="js/jquery.js"></script>
+  <script src="js/scripts.js"></script>
 
-    <title>Tic Tac Toe</title>
+  <title>Tic Tac Toe</title>
 </head>
 <body>
-    <h1>tic tac toe</h1>
-    
+  <div class="container">
+    <h1 class="text-center">Tic Tac Toe Game</h1>
+    <!-- Player input -->
+    <div class="row">
+      <!-- Player 1 input -->
+      <div class="col-md-6 text-center">
+          <div class="form-group">
+              <label for="player-1">Player 1 Name</label>
+              <input type="text" class="form-control" id="player-1" placeholder="Name for X">
+          </div>
+      </div>
+      <!-- Player 2 input -->
+      <div class="col-md-6 text-center">
+          <div class="form-group">
+              <label for="player-2">Player 2 Name</label>
+              <input type="text" class="form-control" id="player-2" placeholder="Name for O">
+          </div>
+        
+      </div>
+    </div>
+
+    <!-- Start Button -->
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <button class="btn btn-lg btn-default btn-block">Start</button>
+      </div>
+    </div>
+    <!-- Winning Callout -->
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4 text-center">
+          <h4>The Winner is X</h4>
+        </div>
+    </div>
+
+    <!-- Game Board -->
+    <div class="row game-board">
+       <div id="r1c1" class="square row1 col1">x</div>
+       <div id="r1c2" class="square row1 col2"></div>
+       <div id="r1c3" class="square row1 col3"></div>
+
+       <div id="r2c1" class="square  row2 co1"></div>
+       <div id="r2c2" class="square row2 col2">O</div>
+       <div id="r2c3" class="square row2 col3"></div>
+
+       <div id="r3c1" class="square row2 col1">X</div>
+       <div id="r3c2" class="square row2 col2"></div>
+       <div id="r3c3" class="square row2 col3">X</div>
+    </div>
+
+  </div>
 </body>
+
 </html>
