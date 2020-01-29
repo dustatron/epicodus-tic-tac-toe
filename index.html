@@ -11,7 +11,7 @@
   
   <!-- Scripts -->
   <script src="js/jquery.js"></script>
-  <script src="js/scripts.js"></script>
+  
 
   <title>Tic Tac Toe</title>
 </head>
@@ -24,7 +24,7 @@
       <div class="col-md-6 text-center">
           <div class="form-group">
               <label for="player-1">Player 1 Name</label>
-              <input type="text" class="form-control" id="player-1" placeholder="Name for X">
+              <input type="text" class="form-control" id="player-1" placeholder="Name for X" value="Jamie">
           </div>
           <div class="player-1-score">
             Player 1 : 5 Points
@@ -34,7 +34,7 @@
       <div class="col-md-6 text-center">
           <div class="form-group">
               <label for="player-2">Player 2 Name</label>
-              <input type="text" class="form-control" id="player-2" placeholder="Name for O">
+              <input type="text" class="form-control" id="player-2" placeholder="Name for O" value="Dusty">
           </div>
 
           <div class="player-2-score">
@@ -47,7 +47,7 @@
     <!-- Start Button -->
     <div class="row">
       <div class="col-md-4 col-md-offset-4">
-        <button class="btn btn-lg btn-default btn-block">Start</button>
+        <button id="startButton" class="btn btn-lg btn-default btn-block">Start</button>
       </div>
     </div>
     <!-- Winning Callout -->
@@ -59,20 +59,21 @@
 
     <!-- Game Board -->
     <div class="row game-board">
-       <div id="r1c1" class="square row1 col1">x</div>
-       <div id="r1c2" class="square row1 col2"></div>
-       <div id="r1c3" class="square row1 col3"></div>
+       <div id="r1c1" class="square"></div>
+       <div id="r1c2" class="square"></div>
+       <div id="r1c3" class="square"></div>
 
-       <div id="r2c1" class="square  row2 co1"></div>
-       <div id="r2c2" class="square row2 col2">O</div>
-       <div id="r2c3" class="square row2 col3"></div>
+       <div id="r2c1" class="square"></div>
+       <div id="r2c2" class="square"></div>
+       <div id="r2c3" class="square"></div>
 
-       <div id="r3c1" class="square row2 col1">X</div>
-       <div id="r3c2" class="square row2 col2"></div>
-       <div id="r3c3" class="square row2 col3">X</div>
+       <div id="r3c1" class="square"></div>
+       <div id="r3c2" class="square"></div>
+       <div id="r3c3" class="square"></div>
     </div>
 
   </div>
+  <script src="js/scripts.js"></script>
 </body>
 
 </html>
