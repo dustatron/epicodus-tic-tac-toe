@@ -26,6 +26,14 @@ function Controller(ui) {
   //public
   this.currentPlayer = function() {
     game.turn++;
+    
+    if(game.turn >= 5 && game.turn <= 9) {
+      var winner = checkForWinner();
+      if(winner) {
+        alert(winner);
+      }
+    }
+
     if(game.turn % 2 === 0) {
       icon = "O"
       return "O";
@@ -65,6 +73,24 @@ function Controller(ui) {
         game.board[2][2] = icon;
         break;
     }
+  }
+
+  //returns icon of winner or false if no winner
+  var checkForWinner = function() {
+    if(game.board[0][0] === game.board[1][1] && game.board[1][1] === game.board[2][2]){
+      return game.board[0][0]; 
+    } else if (game.board[0][2] === game.board[1][1] && game.board[1][1] === game.board[2][0]) {
+      return game.board[0][2]; 
+    }
+
+    for (let i = 0; i < game.board.length; i++) {
+      if(game.board[i][0] === game.board[i][1] && game.board[i][1] === game.board[i][2] && game.board[i][0] !== "") {
+        return game.board[i][0];
+      } else if(game.board[0][i] === game.board[1][i] && game.board[1][i] === game.board[2][i] && game.board[0][i] !== "") {
+        return game.board[0][i];
+      }
+    }
+    return false;
   }
 
   this.clearBoard = function () {
@@ -107,3 +133,27 @@ function Controller(ui) {
     console.log(ui.user1.val(), ui.user2.val());
   }
 }
+
+
+// this.checkForWinner = function() {
+//   var value = false;
+//   //check diagonal wins
+//   // if(game.board[0][0] === game.board[1][1] && game.board[1][1] === game.board[2][2]) {
+//   //   console.log("first");
+//   //   value = game.board[0][0];
+//   // } else if(game.board[0][2] === game.board[1][1] && game.board[1][1] === game.board[2][0]) {
+//   //   console.log("second");
+//   //   value = game.board[0][2];
+//   // } else {
+//     console.log("in else")
+//     //checking horizontal wins
+//     for(var i = 0; i < 3; i++) {
+//       value = checker(game.board[i][0], game.board[i][1], game.board[i][2]);
+//     }
+//     //check vertical wins
+//   //   for(var i = 0; i < 3; i++) {
+//   //     value = checker(game.board[0][i], game.board[1][i], game.board[2][i]);
+//   //   }
+//   // // }
+//   return value;
+// }
