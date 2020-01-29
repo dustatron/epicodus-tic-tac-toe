@@ -162,7 +162,8 @@ function Controller(ui) {
         }
         ui.winTitle.html('The winner is ' + winner + '!!!');
       }
-    } else if (game.turn >= 9) {
+    } else if (game.turn === 9) {
+      winner = checkForWinner();
       if (winner) {
         this.state = false;
         ui.winTitle.html('The winner is ' + winner + '!!!');
