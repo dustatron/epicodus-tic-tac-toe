@@ -20,6 +20,11 @@ function UI() {
 
   this.hidden.hide();
 
+
+  this.writeOutComputerMove = function(id){
+    $('#'+id).html('O');
+  } 
+
   //private
   var that = this;
   var computerBtn = $('#playAI');
@@ -34,6 +39,7 @@ function UI() {
     controller.state = true;
     that.winTitle.html("");
     ui.startButtonText.html("Restart");
+    computerBtn.hide();
   });
 
   // ------------- Board Clicks --------------- \\
@@ -127,13 +133,16 @@ function Controller(ui) {
     game.turn++;
     if (game.turn % 2 === 0) {
       icon = "O"
-      if(this.AI){
-        controller.computerTurn();
-      } else {
-        return "O";
-      }
+
+      return "O";
     } else {
       icon = "X"
+      if(this.AI){
+        // console.log("this is the computer " + this.AI);
+       computerTurn()
+        game.turn++;
+
+      }
       return "X";
     }
   }
@@ -232,15 +241,32 @@ function Controller(ui) {
     return "cleared board"
   }
 
-  this.domBoard = [
+  var domBoard = [
     ["r1c1", "r1c2", "r1c3"],
     ["r2c1", "r2c2", "r2c3"],
     ["r3c1", "r3c2", "r3c3"]
-  ]
-} // End Controller
+  ];
 
-Controller.prototype.computerTurn = function() {
-  //random number get postion.
-  //write this postion mr.ui
-  console.log('computer turn');
-}
+  var computerTurn = function() {
+    //random number get postion.
+    //write this postion mr.ui
+    var move = true;
+    var place;
+    
+    while (move) {
+      var randomCol = Math.floor(Math.random()*3);
+      var randomRow = Math.floor(Math.random()*3);
+      if(game.board[randomRow][randomCol] === ""){
+        console.log(randomRow, randomCol, game.board[randomRow][randomCol]);
+        game.board[randomRow][randomCol] = "O";
+        move = false;
+        place = [randomRow,randomCol]
+        
+      }
+  
+    }
+
+    ui.writeOutComputerMove(domBoard[place[0]][place[1]]);
+  
+  }
+} // End Controller
