@@ -1,6 +1,8 @@
 var ui = new UI();
 var controller = new Controller(ui);
 
+//////////////////////////////////////////////////////////
+// --------------- THE VIEW A.K.A Front End ------------ \\
 function UI() {
   //public
   this.user1 = $("#player-1"); //input
@@ -9,7 +11,7 @@ function UI() {
   this.player2Name = $("#player2Name");//title copy
   this.user2 = $("#player-2"); //imnput
 
-  this.theBoard =  $(".game-board");
+  this.theBoard = $(".game-board");
   this.hidden = $(".hideDiv");
   this.winTitle = $('#win-title');
   this.player1Score = $("#playerScoreX");
@@ -17,9 +19,11 @@ function UI() {
   this.startButtonText = $("#startButton");
 
   this.hidden.hide();
-  
-  var that = this;
+
   //private
+  var that = this;
+  var computerBtn = $('#playAI');
+
   // ------------- Start Button click --------------- \\
   $("button#startButton").click(function () {
     showPlayerNames()
@@ -32,21 +36,25 @@ function UI() {
     ui.startButtonText.html("Restart");
   });
 
- // ------------- Board Clicks --------------- \\
- this.theBoard.on("click", ".square", function() {
-   if(controller.state){
-     if($(this).html() === "") {
-       $(this).html(controller.currentPlayer());
-       controller.writeToBoard(this.id);
-       controller.checkBoard();
-       // console.log(this.id);
-     }
-   }
+  // ------------- Board Clicks --------------- \\
+  this.theBoard.on("click", ".square", function () {
+    if (controller.state) {
+      if ($(this).html() === "") {
+        $(this).html(controller.currentPlayer());
+        controller.writeToBoard(this.id);
+        controller.checkBoard();
+        // console.log(this.id);
+      }
+    }
+  });
+
+  computerBtn.click(function (event) {
+    bootUpComputer();
   });
 
 
   //view functions
-  var showPlayerNames = function(){
+  var showPlayerNames = function () {
 
     that.player1Name.html(that.user1.val());
     that.user1.html();
@@ -55,22 +63,40 @@ function UI() {
     that.player2Name.html(that.user2.val());
     that.user2.html();
     that.user2.hide();
-
   }
-}
 
-UI.prototype.createController = function(controller) {
-  this.controller = controller;
-}
+  var bootUpComputer = function () {
+    
+    console.log(computerBtn.html() );
+    if(computerBtn.html() === 'Play AI'){
+      that.user2.val("Master Data")
+      that.user2.attr('readonly', 'readonly');
+      computerBtn.html('Play Human');
+      computerBtn.removeClass('btn-danger');
+      computerBtn.addClass('btn-success');
+      controller.AI = true;
+    } else if (computerBtn.html() === 'Play Human') {
+      controller.AI = false;
+      that.user2.val("")
+      that.user2.removeAttr('readonly');
+      computerBtn.html('Play AI');
+      computerBtn.removeClass('btn-success');
+      computerBtn.addClass('btn-danger');
+    }
+    
+  }
+} // end View
 
+///////////////////////////////////////////////////////////////////
+// ------------------ CONTROLLER, A.K.A Business time --------- \\
 function Controller(ui) {
-  
+
   //private
   var icon;
 
   var game = {
     board: [
-      ["", "" , ""],
+      ["", "", ""],
       ["", "", ""],
       ["", "", ""]
     ],
@@ -89,47 +115,52 @@ function Controller(ui) {
   this.board = game.board;
   this.state = game.state;
 
-  this.consoleLog = function() {
+  this.consoleLog = function () {
     console.log("in method")
     console.log(ui.user1.val(), ui.user2.val());
   }
 
-   //public
-  
-   this.currentPlayer = function() {
+  //public
+  this.AI = false;
+
+  this.currentPlayer = function () {
     game.turn++;
-    if(game.turn % 2 === 0) {
+    if (game.turn % 2 === 0) {
       icon = "O"
-      return "O";
+      if(this.AI){
+        controller.computerTurn();
+      } else {
+        return "O";
+      }
     } else {
       icon = "X"
       return "X";
     }
   }
 
-  this.checkBoard = function() {
-    if(game.turn >= 5 && game.turn <= 8) {
+  this.checkBoard = function () {
+    if (game.turn >= 5 && game.turn <= 8) {
       var winner = checkForWinner();
-      if(winner) {
+      if (winner) {
         this.state = false;
-        if(winner === "X") {
+        if (winner === "X") {
           game.playerX.score++;
           ui.player1Score.html(game.playerX.score);
-          
-        } else if(winner === "O") {
+
+        } else if (winner === "O") {
           game.playerO.score++;
           ui.player2Score.html(game.playerO.score);
         }
-        ui.winTitle.html('The winner is ' + winner +'!!!');
-      } 
-    } else if (game.turn >= 9){
-      if(winner) {
+        ui.winTitle.html('The winner is ' + winner + '!!!');
+      }
+    } else if (game.turn >= 9) {
+      if (winner) {
         this.state = false;
-        ui.winTitle.html('The winner is ' + winner +'!!!');
-        if(winner === "X") {
+        ui.winTitle.html('The winner is ' + winner + '!!!');
+        if (winner === "X") {
           game.playerX.score++;
           ui.player1Score.html(game.playerX.score);
-        } else if(winner === "O") {
+        } else if (winner === "O") {
           ui.player2Score.html(game.playerO.score);
           game.playerO.score++;
         }
@@ -139,7 +170,7 @@ function Controller(ui) {
     }
   }
 
-  this.writeToBoard = function(move){
+  this.writeToBoard = function (move) {
     switch (move) {
       case 'r1c1':
         game.board[0][0] = icon;
@@ -172,17 +203,17 @@ function Controller(ui) {
   }
 
   //returns icon of winner or false if no winner
-  var checkForWinner = function() {
-    if(game.board[0][0] === game.board[1][1] && game.board[1][1] === game.board[2][2]){
-      return game.board[0][0]; 
+  var checkForWinner = function () {
+    if (game.board[0][0] === game.board[1][1] && game.board[1][1] === game.board[2][2]) {
+      return game.board[0][0];
     } else if (game.board[0][2] === game.board[1][1] && game.board[1][1] === game.board[2][0]) {
-      return game.board[0][2]; 
+      return game.board[0][2];
     }
 
     for (let i = 0; i < game.board.length; i++) {
-      if(game.board[i][0] === game.board[i][1] && game.board[i][1] === game.board[i][2] && game.board[i][0] !== "") {
+      if (game.board[i][0] === game.board[i][1] && game.board[i][1] === game.board[i][2] && game.board[i][0] !== "") {
         return game.board[i][0];
-      } else if(game.board[0][i] === game.board[1][i] && game.board[1][i] === game.board[2][i] && game.board[0][i] !== "") {
+      } else if (game.board[0][i] === game.board[1][i] && game.board[1][i] === game.board[2][i] && game.board[0][i] !== "") {
         return game.board[0][i];
       }
     }
@@ -197,7 +228,19 @@ function Controller(ui) {
     });
     ui.theBoard.contents().empty()
     game.turn = 0;
-    
+
     return "cleared board"
   }
+
+  this.domBoard = [
+    ["r1c1", "r1c2", "r1c3"],
+    ["r2c1", "r2c2", "r2c3"],
+    ["r3c1", "r3c2", "r3c3"]
+  ]
+} // End Controller
+
+Controller.prototype.computerTurn = function() {
+  //random number get postion.
+  //write this postion mr.ui
+  console.log('computer turn');
 }

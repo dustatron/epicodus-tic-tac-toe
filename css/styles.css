@@ -1,3 +1,6 @@
+/* .show-game {
+    display: none;
+} */
 
 .game-board {
     /* border: 1px solid black; */
@@ -55,5 +58,10 @@
     border-left: 1px solid black;
 }
 
+.form-control {
+    margin: auto;
+    display: inline-block;
+    width: 40%;
+}
 
 

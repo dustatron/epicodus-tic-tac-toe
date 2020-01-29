@@ -16,7 +16,7 @@
   <title>Tic Tac Toe</title>
 </head>
 <body>
-  <div class="container">
+  <div class="container show-game">
     <h1 class="text-center">Tic Tac Toe Game</h1>
     <!-- Player input -->
     <div class="row player-box">
@@ -24,7 +24,7 @@
       <div class="col-md-6 text-center">
           <div class="form-group">
               <label id="player1Name" for="player-1">Player 1 Name</label>
-              <input type="text" class="form-control" id="player-1" placeholder="Name for X" value="Jamie">
+              <input type="text" class="form-control" id="player-1" placeholder="Name for X">
           </div>
           <div class="player-1-score">
               Player 1 Score: <span id="playerScoreX">0</span>
@@ -34,7 +34,8 @@
       <div class="col-md-6 text-center">
           <div class="form-group">
               <label id="player2Name" for="player-2">Player 2 Name</label>
-              <input type="text" class="form-control" id="player-2" placeholder="Name for O" value="Dusty">
+              <input type="text" class="form-control" id="player-2" placeholder="Name for O">
+              <button id="playAI" class="btn btn-danger">Play AI</button>
           </div>
 
           <div class="player-2-score">
