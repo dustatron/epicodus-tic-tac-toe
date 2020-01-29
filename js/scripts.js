@@ -3,19 +3,60 @@ var controller = new Controller(ui);
 
 function UI() {
   //public
-  this.user1 = $("#player-1");
-  this.user2 = $("#player-2");
-  this.theBoard =  $(".game-board");
+  this.user1 = $("#player-1"); //input
+  this.player1Name = $("#player1Name");//title copy
 
+  this.player2Name = $("#player2Name");//title copy
+  this.user2 = $("#player-2"); //imnput
+
+  this.theBoard =  $(".game-board");
+  this.hidden = $(".hideDiv");
+  this.winTitle = $('#win-title');
+  this.player1Score = $("#playerScoreX");
+  this.player2Score = $("#playerScoreO");
+  this.startButtonText = $("#startButton");
+
+  this.hidden.hide();
+  
+  var that = this;
   //private
+  // ------------- Start Button click --------------- \\
   $("button#startButton").click(function () {
+    showPlayerNames()
+
+    that.hidden.slideDown("slow");
     controller.consoleLog();
-  })
+    controller.clearBoard();
+    controller.state = true;
+    that.winTitle.html("");
+    ui.startButtonText.html("Restart");
+  });
+
+ // ------------- Board Clicks --------------- \\
  this.theBoard.on("click", ".square", function() {
-    $(this).html(controller.currentPlayer());
-    controller.writeToBoard(this.id);
-    // console.log(this.id);
-  })
+   if(controller.state){
+     if($(this).html() === "") {
+       $(this).html(controller.currentPlayer());
+       controller.writeToBoard(this.id);
+       controller.checkBoard();
+       // console.log(this.id);
+     }
+   }
+  });
+
+
+  //view functions
+  var showPlayerNames = function(){
+
+    that.player1Name.html(that.user1.val());
+    that.user1.html();
+    that.user1.hide();
+
+    that.player2Name.html(that.user2.val());
+    that.user2.html();
+    that.user2.hide();
+
+  }
 }
 
 UI.prototype.createController = function(controller) {
@@ -23,23 +64,78 @@ UI.prototype.createController = function(controller) {
 }
 
 function Controller(ui) {
-  //public
-  this.currentPlayer = function() {
-    game.turn++;
-    
-    if(game.turn >= 5 && game.turn <= 9) {
-      var winner = checkForWinner();
-      if(winner) {
-        alert(winner);
-      }
-    }
+  
+  //private
+  var icon;
 
+  var game = {
+    board: [
+      ["", "" , ""],
+      ["", "", ""],
+      ["", "", ""]
+    ],
+    playerX: {
+      name: "",
+      score: 0,
+    },
+    playerO: {
+      name: "",
+      score: 0
+    },
+    turn: 0,
+    state: false,
+  }
+
+  this.board = game.board;
+  this.state = game.state;
+
+  this.consoleLog = function() {
+    console.log("in method")
+    console.log(ui.user1.val(), ui.user2.val());
+  }
+
+   //public
+  
+   this.currentPlayer = function() {
+    game.turn++;
     if(game.turn % 2 === 0) {
       icon = "O"
       return "O";
     } else {
       icon = "X"
       return "X";
+    }
+  }
+
+  this.checkBoard = function() {
+    if(game.turn >= 5 && game.turn <= 8) {
+      var winner = checkForWinner();
+      if(winner) {
+        this.state = false;
+        if(winner === "X") {
+          game.playerX.score++;
+          ui.player1Score.html(game.playerX.score);
+          
+        } else if(winner === "O") {
+          game.playerO.score++;
+          ui.player2Score.html(game.playerO.score);
+        }
+        ui.winTitle.html('The winner is ' + winner +'!!!');
+      } 
+    } else if (game.turn >= 9){
+      if(winner) {
+        this.state = false;
+        ui.winTitle.html('The winner is ' + winner +'!!!');
+        if(winner === "X") {
+          game.playerX.score++;
+          ui.player1Score.html(game.playerX.score);
+        } else if(winner === "O") {
+          ui.player2Score.html(game.playerO.score);
+          game.playerO.score++;
+        }
+      } else {
+        ui.winTitle.html('Its a tie!!!');
+      }
     }
   }
 
@@ -100,60 +196,8 @@ function Controller(ui) {
       row[2] = "";
     });
     ui.theBoard.contents().empty()
+    game.turn = 0;
+    
     return "cleared board"
   }
-  
-  
-  
-  //private
-  var icon;
-
-  var game = {
-    board: [
-      ["", "" , ""],
-      ["", "", ""],
-      ["", "", ""]
-    ],
-    playerX: {
-      name: "",
-      score: 0,
-    },
-    playerO: {
-      name: "",
-      score: 0
-    },
-    turn: 0,
-    state: false,
-  }
-
-  this.board = game.board;
-
-  this.consoleLog = function() {
-    console.log("in method")
-    console.log(ui.user1.val(), ui.user2.val());
-  }
 }
-
-
-// this.checkForWinner = function() {
-//   var value = false;
-//   //check diagonal wins
-//   // if(game.board[0][0] === game.board[1][1] && game.board[1][1] === game.board[2][2]) {
-//   //   console.log("first");
-//   //   value = game.board[0][0];
-//   // } else if(game.board[0][2] === game.board[1][1] && game.board[1][1] === game.board[2][0]) {
-//   //   console.log("second");
-//   //   value = game.board[0][2];
-//   // } else {
-//     console.log("in else")
-//     //checking horizontal wins
-//     for(var i = 0; i < 3; i++) {
-//       value = checker(game.board[i][0], game.board[i][1], game.board[i][2]);
-//     }
-//     //check vertical wins
-//   //   for(var i = 0; i < 3; i++) {
-//   //     value = checker(game.board[0][i], game.board[1][i], game.board[2][i]);
-//   //   }
-//   // // }
-//   return value;
-// }
